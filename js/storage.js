@@ -1,8 +1,8 @@
 let options = {
     api: {
         key: '',
-        base: 'http://localhost:8989',
-        sonarr_base: '',
+        base: 'http://localhost:7878',
+        radarr_base: '',
         poll: 60
     },
     plexUrls: []
@@ -29,7 +29,7 @@ const Storage = {
         return options;
     },
     collections: {
-        series: null
+        movies: null
     }
 };
 

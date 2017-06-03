@@ -5,67 +5,39 @@ const Storage = require('./storage');
 const Page = require('./page');
 
 const Poster = {
-    createEpisode: (episode) => {
+
+    createMovie: (movie, clickFn, text = true) => {
         const poster = document.createElement('div');
-        poster.classList.add('sonarr-poster');
+        poster.classList.add('radarr-poster');
 
-        const posterCard = Poster.createCard(episode.series);
-        poster.appendChild(posterCard);
-
-        const title = document.createElement('div');
-        title.classList.add('sonarr-title');
-        const series = document.createElement('a');
-        series.setAttribute('href', '#');
-        series.textContent = episode.series.title;
-        title.appendChild(series);
-        const episodeName = document.createElement('a');
-        episodeName.classList.add('secondary');
-        episodeName.setAttribute('href', '#');
-        episodeName.textContent = episode.title;
-        title.appendChild(episodeName);
-        const metadata = document.createElement('div');
-        metadata.classList.add('secondary');
-        metadata.innerHTML = 'S' + episode.seasonNumber + '<span class="sonarr-season-separator">·</span>' + 'E' + episode.episodeNumber;
-        title.appendChild(metadata);
-
-        poster.appendChild(title);
-
-        return poster;
-    },
-    createSeries: (series, clickFn, text = true) => {
-        const poster = document.createElement('div');
-        poster.classList.add('sonarr-poster');
-
-        const posterCard = Poster.createCard(series, clickFn);
+        const posterCard = Poster.createCard(movie, clickFn);
         poster.appendChild(posterCard);
 
         if(text) {
             // TODO: Generalize text captions
             const title = document.createElement('div');
-            title.classList.add('sonarr-title');
+            title.classList.add('radarr-title');
             const srs = document.createElement('a');
             if(typeof clickFn == 'function') {
                 srs.addEventListener('click', clickFn);
             }
             srs.setAttribute('href', '#');
-            srs.textContent = series.title;
+            srs.textContent = movie.title;
             title.appendChild(srs);
-            if(series.nextAiring) {
-                const nextAiring = document.createElement('div');
-                nextAiring.classList.add('secondary');
-                nextAiring.textContent = moment(series.nextAiring).fromNow();
-                nextAiring.setAttribute('title', moment(series.nextAiring).toString());
-                title.appendChild(nextAiring);
-            }
+            const date = document.createElement('div');
+            date.classList.add('radarr-date');
+            date.textContent = movie.year;
+            title.appendChild(date);
+
 
             poster.appendChild(title);
         }
 
         return poster;
     },
-    createCard: (series, clickFn) => {
+    createCard: (movie, clickFn) => {
         const posterCard = document.createElement('div');
-        posterCard.classList.add('sonarr-postercard');
+        posterCard.classList.add('radarr-postercard');
         if(typeof clickFn == 'function') {
             posterCard.addEventListener('click', clickFn);
         } else {
@@ -73,18 +45,25 @@ const Poster = {
         }
 
         const cover = document.createElement('div');
-        cover.classList.add('sonarr-cover');
+        cover.classList.add('radarr-cover');
         const coverImage = document.createElement('div');
-        coverImage.classList.add('sonarr-cover-image');
+        coverImage.classList.add('radarr-cover-image');
+        if (movie.downloaded) {
+            coverImage.classList.add('radarr-movie-downloaded');
+        } else if (movie.status === 'released') {
+            coverImage.classList.add('radarr-movie-available');
+        } else {
+            coverImage.classList.add('radarr-movie-coming');
+        }
 
         const options = Storage.get();
-        for(let i in series.images) {
-            if(series.images[i].coverType == 'poster') {
-                let url = series.images[i].url;
+        for(let i in movie.images) {
+            if(movie.images[i].coverType == 'poster') {
+                let url = movie.images[i].url;
                 if(url.indexOf('http') == -1) {
                     // Remove the URL Base from the relative URL and replace any double slashes
-                    if(options.api.sonarr_base) {
-                        url = url.replace(options.api.sonarr_base, '')
+                    if(options.api.radarr_base) {
+                        url = url.replace(options.api.radarr_base, '')
                             .replace(/([^:]\/)\/+/g, '/');
                     }
                     // Request a smaller sized poster

@@ -1,3 +1,5 @@
+.DS_STORE
 node_modules
 chrome/js
 chrome/css
+package-lock.json

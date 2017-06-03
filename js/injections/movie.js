@@ -5,8 +5,8 @@ const Page = require('../page');
 module.exports = (openPage) => {
     const checkPage = () => {
         const check = () => {
-            // Detect whether we are on a show homepage
-            if(content.querySelector('.show-details-row') != null) {
+            // Detect whether we are on a movie homepage
+            if(content.querySelector('.movie-details-row') != null) {
                 window.setTimeout(wait, 200);
             } else if(checkCount < 5) {
                 checkCount++;
@@ -33,24 +33,24 @@ module.exports = (openPage) => {
 
     const inject = () => {
         const content = document.querySelector('#content');
-        const showName = content.querySelector('.show-details-row .item-title').textContent;
-        chrome.runtime.sendMessage({ endpoint: 'series' }, resp => {
+        const movieName = content.querySelector('.movie-details-row .item-title').textContent;
+        chrome.runtime.sendMessage({ endpoint: 'movies' }, resp => {
             if(!resp.err) {
-                let series = null;
+                let movies = null;
                 for(var s in resp.res.body) {
-                    if(resp.res.body[s].title == showName) {
-                        series = resp.res.body[s];
+                    if(resp.res.body[s].title == movieName) {
+                        movies = resp.res.body[s];
                     }
                 }
 
-                if(series != null) {
-                    // Insert show status next to studio flag
+                if(movies != null) {
+                    // Insert movie status next to studio flag
                     const studio = content.querySelector('.studio-flag-container');
 
-                    const showStatus = document.createElement('div');
-                    showStatus.classList.add('sonarr-show-status');
+                    const movieStatus = document.createElement('div');
+                    movieStatus.classList.add('radarr-movie-status');
                     let status = 'default';
-                    switch(series.status) {
+                    switch(movies.status) {
                         case 'ended':
                             status = 'danger';
                             break;
@@ -58,22 +58,22 @@ module.exports = (openPage) => {
                             status = 'info';
                             break;
                     }
-                    let html = '<span class="label label-' + status + '">' + series.status + '</span>';
-                    if(series.nextAiring) {
-                        html += ' Next airing ' + moment(series.nextAiring).fromNow();
+                    let html = '<span class="label label-' + status + '">' + movies.status + '</span>';
+                    if(movies.inCinemas) {
+                        html += ' Next airing ' + moment(movies.inCinemas).fromNow();
                     }
-                    showStatus.innerHTML = html;
+                    movieStatus.innerHTML = html;
 
-                    studio.insertBefore(showStatus, studio.querySelector('.studio-flag'));
+                    studio.insertBefore(movieStatus, studio.querySelector('.studio-flag'));
 
-                    const metadata = content.querySelector('.show-details-metadata-container');
+                    const metadata = content.querySelector('.movie-details-metadata-container');
                     const manage = document.createElement('div');
                     const link = document.createElement('a');
                     link.setAttribute('href', '#');
-                    link.textContent = 'Manage on Sonarr';
+                    link.textContent = 'Manage on Radarr';
                     link.addEventListener('click', e => {
                         e.preventDefault();
-                        openPage('seriesDetail', series);
+                        openPage('movieDetail', movies);
                     });
                     manage.appendChild(link);
                     metadata.appendChild(manage);

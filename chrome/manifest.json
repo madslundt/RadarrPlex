@@ -1,11 +1,11 @@
 {
   "manifest_version": 2,
 
-  "name": "Sonarr for Plex",
-  "short_name": "Sonarr",
-  "description": "View and manage your shows in Sonarr directly in the Plex app",
-  "author": "Dan Bovey",
-  "version": "1.0.5",
+  "name": "Radarr for Plex",
+  "short_name": "Radarr",
+  "description": "View and manage your movies in Radarr directly in the Plex app",
+  "author": "Mads Engel Lundt",
+  "version": "1.0.0",
   "minimum_chrome_version": "36",
 
   "permissions": [
@@ -33,7 +33,7 @@
   }],
 
   "web_accessible_resources": [
-    "img/Sonarr.svg"
+    "img/Radarr.svg"
   ],
 
   "options_ui": {

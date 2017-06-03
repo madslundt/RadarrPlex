@@ -2,8 +2,8 @@ const Storage = require('./storage');
 const Navbar = require('./navbar');
 const Page = require('./page');
 
-const injectShow = require('./injections/show');
-injectShow(Page.openPage);
+const injectMovie = require('./injections/movie');
+injectMovie(Page.openPage);
 
 const wait = () => {
     window.setTimeout(() => {

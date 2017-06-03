@@ -4,10 +4,9 @@ const Storage = require('./storage');
 const Poster = require('./poster');
 
 const pages = {
-    series: require('./pages/series'),
-    seriesDetail: require('./pages/seriesDetail'),
-    addSeries: require('./pages/addSeries'),
-    activity: require('./pages/activity')
+    movies: require('./pages/movies'),
+    movieDetail: require('./pages/movieDetail'),
+    addMovie: require('./pages/addMovie')
 };
 
 const Page = {
@@ -15,7 +14,7 @@ const Page = {
     body: null,
     toggle: () => {
         const content = document.querySelector('#content');
-        if(content.querySelector('.container.sonarr') != null) {
+        if(content.querySelector('.container.radarr') != null) {
             Page.close();
         } else {
             Page.open();
@@ -23,7 +22,6 @@ const Page = {
     },
     open: (openHomepage = true, callback) => {
         window.setTimeout(() => {
-            document.querySelector('.activity-btn').click();
             const content = document.querySelector('#content');
             while(content.hasChildNodes()) {
                 content.removeChild(content.lastChild);
@@ -31,14 +29,14 @@ const Page = {
 
             const page = document.createElement('div');
             page.classList.add('container');
-            page.classList.add('sonarr');
+            page.classList.add('radarr');
 
             const list = document.createElement('ul');
             list.setAttribute('class', 'nav nav-header pull-right');
 
             const createTab = (list, text, clickedFn) => {
                 const item = document.createElement('li');
-                
+
                 const link = document.createElement('a');
                 link.setAttribute('class', 'btn-gray');
                 link.setAttribute('href', '#');
@@ -57,24 +55,23 @@ const Page = {
 
                 list.appendChild(item);
             };
-            createTab(list, 'Series', () => Page.openPage('series'));
-            createTab(list, 'Activity', () => Page.openPage('activity'));
+            createTab(list, 'Movies', () => Page.openPage('movies'));
             createTab(list, 'Settings', () => chrome.runtime.sendMessage({ options: true }));
             page.appendChild(list);
 
             const heading = document.createElement('h2');
-            heading.textContent = 'Sonarr';
+            heading.textContent = 'Radarr';
             page.appendChild(heading);
 
             Page.body = document.createElement('div');
-            Page.body.classList.add('sonarr-content');
+            Page.body.classList.add('radarr-content');
             page.appendChild(Page.body);
 
             content.appendChild(page);
 
             Page.created = true;
             if(openHomepage) {
-                Page.openPage('series');
+                Page.openPage('movies');
             }
 
             if(typeof callback == 'function') {
@@ -92,7 +89,7 @@ const Page = {
         while(Page.body.hasChildNodes()) {
             Page.body.removeChild(Page.body.lastChild);
         }
-        const background = document.querySelector('#content .sonarr-background');
+        const background = document.querySelector('#content .radarr-background');
         if(background) {
             background.remove();
         }
@@ -120,8 +117,8 @@ const Page = {
                         Storage.collections[page] = resp.res.body;
                     } else {
                         const warning = document.createElement('p');
-                        warning.classList.add('sonarr-alert');
-                        warning.innerHTML = '<i class="sonarr-warn glyphicon circle-exclamation-mark"></i> Can\'t connect to Sonarr. Please check API settings.';
+                        warning.classList.add('radarr-alert');
+                        warning.innerHTML = '<i class="radarr-warn glyphicon circle-exclamation-mark"></i> Can\'t connect to Radarr. Please check API settings.';
                         Page.body.appendChild(warning);
                     }
                 });

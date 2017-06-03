@@ -1,8 +1,8 @@
 const Navbar = {
     create: (pageToggle) => {
         const navbar = document.querySelector('.nav-bar-right');
-        
-        if(navbar.querySelector('.sonarr-btn')) {
+
+        if(navbar.querySelector('.radarr-btn')) {
             return;
         }
 
@@ -11,14 +11,14 @@ const Navbar = {
         btn.classList.remove('active');
 
         const link = btn.querySelector('a');
-        link.setAttribute('class', 'sonarr-btn');
+        link.setAttribute('class', 'radarr-btn');
         link.setAttribute('href', '#');
-        link.setAttribute('title', 'Sonarr');
+        link.setAttribute('title', 'Radarr');
 
         const icon = link.querySelector('i');
         const svg = document.createElement('img');
-        svg.setAttribute('src', chrome.extension.getURL('img/Sonarr.svg'));
-        svg.setAttribute('width', 24);
+        svg.setAttribute('src', chrome.extension.getURL('img/Radarr.svg'));
+        svg.setAttribute('width', 26);
         link.replaceChild(svg, icon);
 
         link.addEventListener('click', e => {
@@ -31,7 +31,7 @@ const Navbar = {
         const number = link.querySelector('.badge');
         number.classList.add('hidden');
 
-        // Check the status of Sonarr
+        // Check the status of Radarr
         chrome.runtime.sendMessage({ endpoint: 'queue' }, resp => {
             if(!resp.err) {
                 number.textContent = resp.res.length;
@@ -45,18 +45,18 @@ const Navbar = {
     },
     warn: () => {
         const navbar = document.querySelector('.nav-bar-right');
-        const btn = navbar.querySelector('.sonarr-btn');
+        const btn = navbar.querySelector('.radarr-btn');
 
         const warning = document.createElement('i');
-        warning.classList.add('sonarr-warn');
+        warning.classList.add('radarr-warn');
         warning.classList.add('glyphicon');
         warning.classList.add('circle-exclamation-mark');
         btn.appendChild(warning);
     },
     removeWarn: () => {
         const navbar = document.querySelector('.nav-bar-right');
-        const btn = navbar.querySelector('.sonarr-btn');
-        btn.querySelector('.sonarr-warn').remove();
+        const btn = navbar.querySelector('.radarr-btn');
+        btn.querySelector('.radarr-warn').remove();
     }
 };
 

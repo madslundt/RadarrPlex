@@ -1,9 +1,9 @@
 @import "injections";
 
-.sonarr-btn {
+.radarr-btn {
     top: -2px;
 
-    .sonarr-warn {
+    .radarr-warn {
         position: absolute;
         top: 15px !important;
         right: 8px;
@@ -11,22 +11,22 @@
     }
 }
 
-.sonarr-warn {
+.radarr-warn {
     color: #F0AD4E;
 }
 
-.sonarr-alert {
+.radarr-alert {
     padding: 10px 20px;
     border-radius: 10px;
     box-shadow: 0 4px 9pt rgba(0, 0, 0, 0.5);
     background: #000;
 
-    .sonarr-warn {
+    .radarr-warn {
         margin-right: 2px;
     }
 }
 
-.sonarr-settings-feedback {
+.radarr-settings-feedback {
     margin-left: 20px;
 
     &.circle-ok {
@@ -34,7 +34,7 @@
     }
 }
 
-.sonarr-content .filter-bar {
+.radarr-content .filter-bar {
     .btn {
         margin-right: 15px;
     }
@@ -48,18 +48,18 @@
     }
 }
 
-.sonarr-posters {
+.radarr-posters {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
 }
 
-.sonarr-poster {
+.radarr-poster {
     height: 253px;
     float: left;
     margin: 0 10px 30px;
 }
-.sonarr-postercard {
+.radarr-postercard {
     position: relative;
     width: 134px;
     height: 201px;
@@ -79,7 +79,7 @@
         }
     }
 
-    .sonarr-cover {
+    .radarr-cover {
         display: block;
         position: absolute;
         top: 0;
@@ -87,17 +87,54 @@
         width: 100%;
         height: 100%;
 
-        .sonarr-cover-image {
-            position: absolute;
+        .radarr-cover-image {
+            position: relative;
             width: 100%;
             height: 100%;
             background-color: #333;
             background-size: cover;
             background-position: center center;
+
+            &:after {
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                padding: 5px 10px;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                font-size: 10px;
+                opacity: .8;
+            }
+
+            &.radarr-movie-downloaded {
+                &:after {
+                    content: "Downloaded";
+                    background-color: green;
+                }
+            }
+            &.radarr-movie-available {
+                &:after {
+                    content: "Available";
+                    background-color: red;
+                }
+            }
+            &.radarr-movie-coming {
+                opacity: .5;
+                transition: .3s ease-in-out opacity;
+                &:hover {
+                    opacity: 1;
+                }
+                &:after {
+                    content: "Coming";
+                    background-color: orange;
+                }
+            }
         }
     }
 }
-.sonarr-title {
+.radarr-title {
     width: 134px;
     padding-top: 10px;
     font-size: 13px;
@@ -126,12 +163,12 @@
         text-decoration: underline;
         color: #FFF;
     }
-    .sonarr-season-separator {
+    .radarr-season-separator {
         margin: 0 4px;
     }
 }
 
-.sonarr-table {
+.radarr-table {
     width: 100%;
 
     thead th {
@@ -170,7 +207,7 @@
     }
 }
 
-.sonarr-table {
+.radarr-table {
     .label {
         font-size: 11px;
     }
@@ -185,15 +222,11 @@
     }
 }
 
-.sonarr-series-add-input {
+.radarr-movie-add-input {
     margin-bottom: 30px;
 }
 
-.sonarr-season-list {
-    background: #1F1F1F;
-}
-
-.sonarr-show {
+.radarr-movie {
     overflow: auto;
 
     h2 {
@@ -209,7 +242,7 @@
     .label {
         margin-right: 10px;
     }
-    
+
     .input {
         float: left;
         margin-right: 10px;
@@ -220,15 +253,15 @@
         }
     }
 
-    .sonarr-poster {
+    .radarr-poster {
         margin: 0 20px 0 0;
     }
-    .sonarr-postercard {
+    .radarr-postercard {
         margin: 0;
     }
 }
 
-.sonarr-background {
+.radarr-background {
     position: absolute;
     top: 0;
     left: 0;

@@ -1,20 +1,20 @@
 {
-  "name": "sonarr-for-plex",
+  "name": "radarr-for-plex",
   "version": "1.0.5",
-  "description": "View and manage your shows in Sonarr directly in the Plex app",
+  "description": "View and manage your movies in Radarr directly in the Plex app",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/danbovey/SonarrPlex.git"
+    "url": "git+https://github.com/madslundt/RadarrPlex.git"
   },
-  "author": "Dan Bovey <dan@danbovey.uk>",
+  "author": "Mads Engel Lundt <madslundt@live.dk>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/danbovey/SonarrPlex/issues"
+    "url": "https://github.com/madslundt/RadarrPlex/issues"
   },
-  "homepage": "https://github.com/danbovey/SonarrPlex#readme",
+  "homepage": "https://github.com/madslundt/RadarrPlex#readme",
   "devDependencies": {
     "babel-preset-es2015": "^6.18.0",
     "babelify": "^7.3.0",

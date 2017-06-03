@@ -4,10 +4,10 @@ const path = require('path');
 const Storage = require('./storage');
 
 const API = {
-    series: () => API.get('series'),
-    seriesLookup: ({ term }) => API.get('series/lookup', { term }),
-    seriesAdd: (params) => API.post('series', params),
-    seriesEpisodes: ({ seriesId }) => API.get('episode', { seriesId }),
+    movies: () => API.get('movie'),
+    movieLookup: ({ term }) => API.get('movie/lookup', { term }),
+    movieDetail: ({ movieId }) => API.get('movie', { movieId }),
+    movieAdd: (params) => API.post('movie', params),
     status: () => API.get('system/status'),
     calendar: ({ start, end }) => API.get('calendar', { start, end }),
     queue: () => API.get('queue'),

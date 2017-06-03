@@ -3,7 +3,7 @@ const moment = require('moment');
 const Storage = require('../storage');
 const Poster = require('../poster');
 
-let seriesList = [];
+let moviesList = [];
 let pageBody, openPage;
 
 const createBar = (pagePage, openPage) => {
@@ -11,8 +11,8 @@ const createBar = (pagePage, openPage) => {
     bar.classList.add('filter-bar');
     const addBtn = document.createElement('button');
     addBtn.setAttribute('class', 'btn btn-sm btn-default');
-    addBtn.innerHTML = '<span class="glyphicon plus"></span> Add Series';
-    addBtn.addEventListener('click', () => openPage('addSeries'));
+    addBtn.innerHTML = '<span class="glyphicon plus"></span> Add Movie';
+    addBtn.addEventListener('click', () => openPage('addMovie'));
     bar.appendChild(addBtn);
 
     const syncBtn = document.createElement('button');
@@ -33,7 +33,7 @@ const createBar = (pagePage, openPage) => {
     updateBtn.innerHTML = updateContent;
     updateBtn.addEventListener('click', () => {
         updateBtn.innerHTML = '<div class="loading"></div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Update Library';
-        chrome.runtime.sendMessage({ endpoint: 'commandRun', params: { name: 'RefreshSeries' } }, resp => {
+        chrome.runtime.sendMessage({ endpoint: 'commandRun', params: { name: 'RefreshMovies' } }, resp => {
             updateBtn.innerHTML = updateContent;
         });
     });
@@ -52,53 +52,56 @@ const createBar = (pagePage, openPage) => {
         sortGroup.appendChild(sortBtn);
     };
     createSortBtn('All', 'unchecked', null);
-    createSortBtn('Monitored', 'bookmark', show => show.monitored);
-    createSortBtn('Continuing', 'play', show => show.status == 'continuing');
-    createSortBtn('Ended', 'stop', show => show.status == 'ended');
-    createSortBtn('Missing', 'warning-sign', show => show.episodeFileCount < show.totalEpisodeCount);
+    createSortBtn('Released', 'bookmark', movie => movie.released);
+    // createSortBtn('Continuing', 'play', movie => movie.status == 'continuing');
+    // createSortBtn('Ended', 'stop', movie => movie.status == 'ended');
+    // createSortBtn('Missing', 'warning-sign', movie => movie.episodeFileCount < movie.totalEpisodeCount);
 
     pageBody.appendChild(bar);
 };
 
 const createList = (filterFn = null) => {
-    let series = seriesList;
-    // Sort the series by next airing
-    for(let s in series) {
-        if(typeof series[s].nextAiring == 'undefined') {
-            delete series[s];
+    let movies = moviesList;
+    // Sort the movies by cinema date
+    for(let s in movies) {
+        if(typeof movies[s].inCinemas == 'undefined') {
+            delete movies[s];
         }
     }
-    series = series.sort((a, b) => moment(a.nextAiring).diff(moment(b.nextAiring)));
+    const thisYear = new Date().getFullYear();
+    movies = movies
+        .filter(a => new Date(a.inCinemas).getFullYear() >= thisYear)
+        .sort((a, b) => moment(a.inCinemas).diff(moment(b.inCinemas)));
 
     // If we are using a filter
     if(filterFn != null) {
-        for(var s in series) {
-            if(!filterFn(series[s])) {
-                delete series[s];
+        for(var s in movies) {
+            if(!filterFn(movies[s])) {
+                delete movies[s];
             }
         }
     }
 
-    // Create the list of series
-    let posters = document.querySelector('.sonarr-posters');
+    // Create the list of movies
+    let posters = document.querySelector('.radarr-posters');
     if(posters != null) {
         while(posters.hasChildNodes()) {
             posters.removeChild(posters.lastChild);
         }
     } else {
         posters = document.createElement('div');
-        posters.classList.add('sonarr-posters');
+        posters.classList.add('radarr-posters');
         pageBody.appendChild(posters);
     }
 
-    for(let s in series) {
-        const poster = Poster.createSeries(series[s], () => openPage('seriesDetail', series[s]));
+    for(let s in movies) {
+        const poster = Poster.createMovie(movies[s], () => openPage('movieDetail', movies[s]));
         posters.appendChild(poster);
     }
 }
 
-module.exports = (series, body, open) => {
-    seriesList = series;
+module.exports = (movies, body, open) => {
+    moviesList = movies;
     pageBody = body;
     openPage = open;
 
